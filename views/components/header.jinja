@@ -1,0 +1,15 @@
+{% macro header(paths) -%}
+<header class="header">
+  <p class="header__logo">LOGO TITLE</p>
+  <nav class="header__nav">
+    <ul class="header__list">
+      <li class="header__item">
+        <a class="header__link" href="{{ paths.home }}">Home</a>
+      </li>
+      {# <li class="header__item{% if paths.my_movies %} header__item--active{% endif %}">
+        my_movies
+      </li> #}
+    </ul>
+  </nav>
+</header>
+{%- endmacro %}

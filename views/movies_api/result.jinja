@@ -1,0 +1,28 @@
+{% extends "base.jinja" %}
+
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+{% block main %}
+  <div class="movies-api">
+  {% if correct_search_title %}
+    <ul class="movies-api__list">
+    {% for movie in movies %}
+      <li class="movies-api__item">
+        {% if movie.Poster != 'N/A' %}
+        <img src="{{ movie.Poster }}" alt="poster">
+        {% else %}
+        <p>Not have the poster</p>
+        {% endif %}
+        <h2>{{ movie.Title }}</h2>
+        <p>Year: {{ movie.Year }}</p>
+        <p>imdbID: {{ movie.imdbID }}</p>
+      </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>Error: {{ error_message }}</p>
+  {% endif %}
+  </div>
+{% endblock main %}

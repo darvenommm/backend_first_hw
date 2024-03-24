@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+}
+
+.main {
+  padding: 0 10px;
+}
+
+.header {
+  display: flex;
+
+  color: #ffffff;
+
+  background-color: #808080;
+
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.header__nav {
+  margin-left: 40px;
+}
+
+.header__list {
+  display: flex;
+  gap: 20px;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header__logo {
+  margin: 0;
+}
+
+.header__link {
+  color: inherit;
+}
+
+.movies-api__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+
+  list-style: none;
+  padding: 0;
+  padding: 0;
+}
+
+.movies-api__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-color: grey;
+  border-radius: 15px;
+
+  padding: 10px;
+}
+
+.movies-api__item > p {
+  margin: 10px;
+}
+
+.movies-api__item > h2 {
+  margin: 15px;
+}
