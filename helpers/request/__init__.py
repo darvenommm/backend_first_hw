@@ -12,3 +12,10 @@ class Request:
             key: value for key, value
             in (couple.split('=') for couple in request.path.split('?')[1].split('&'))
         }
+
+    @staticmethod
+    def get_last_segment(request: HTTPRequest) -> str:
+        try:
+            return request.path.split('?')[0].split('/')[-1]
+        except IndexError:
+            return ''

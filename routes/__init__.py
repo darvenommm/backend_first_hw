@@ -4,7 +4,7 @@ from typing import Callable, TypeAlias
 from . import paths
 
 from controllers.movies import MoviesController
-from controllers.moviesApi import MoviesApiController
+from controllers.movies_api import MoviesApiController
 from controllers.assets import AssetsController
 
 
@@ -16,8 +16,9 @@ routes_config: RoutesType  = {
     'GET': {
         paths.home: MoviesApiController.get_all,
         paths.movies_api: MoviesApiController.get_all,
+        paths.movies_api_one: MoviesApiController.get_one,
 
-        paths.one_movie: MoviesController.get_one,
+        paths.movies_one: MoviesController.get_one,
         paths.movies: MoviesController.get_all,
 
         paths.styles: AssetsController.get_styles,
@@ -26,10 +27,10 @@ routes_config: RoutesType  = {
         paths.movies: MoviesController.create,
     },
     'PUT': {
-        paths.one_movie: MoviesController.change,
+        paths.movies_one: MoviesController.change,
     },
     'DELETE': {
-        paths.one_movie: MoviesController.delete,
+        paths.movies_one: MoviesController.delete,
     },
 }
 

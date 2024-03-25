@@ -1,12 +1,13 @@
 # regex
-TITLE_REGEX = r'\w{1,64}'
+IMDB_REGEX = r'tt\d{7}'
 
 # paths
 home = '/'
 
 movies = '/movies'
-one_movie = f'/movies/{TITLE_REGEX}'
+movies_one = f'/movies/{IMDB_REGEX}'
 
 movies_api = '/api-movies'
+movies_api_one = f'/api-movies/{IMDB_REGEX}'
 
 styles = '/styles.css'
