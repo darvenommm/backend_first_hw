@@ -1,0 +1,13 @@
+{% extends "base.jinja" %}
+
+{% block main %}
+  {% if (movies is defined) and movies %}
+    <ul>
+      {% for movie in movies %}
+      <li>{{ movie.title }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Not have any movie</p>
+  {% endif %}
+{% endblock main %}

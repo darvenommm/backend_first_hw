@@ -1,0 +1,35 @@
+services:
+  database:
+    image: postgres:16.2
+    env_file: .env
+    restart: always
+    shm_size: 128mb
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USERNAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+    healthcheck:
+      test: pg_isready -U $DB_USERNAME -d $DB_NAME
+      interval: 10s
+      timeout: 10s
+      retries: 20
+    networks:
+      - net
+
+  server:
+    build: .
+    env_file: .env
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - SERVER_HOST=server
+      - DB_HOST=database
+      - DB_PORT=5432
+    ports:
+      - $SERVER_PORT:$SERVER_PORT
+    networks:
+      - net
+
+networks:
+  net:

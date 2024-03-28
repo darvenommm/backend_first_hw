@@ -1,13 +1,12 @@
-# regex
-IMDB_REGEX = r'tt\d{7}'
+from constants import regex
 
-# paths
+
 home = '/'
 
 movies = '/movies'
-movies_one = f'/movies/{IMDB_REGEX}'
+movies_one = f'/movies/{regex.IMDB}'
 
 movies_api = '/api-movies'
-movies_api_one = f'/api-movies/{IMDB_REGEX}'
+movies_api_one = f'/api-movies/{regex.IMDB}'
 
 styles = '/styles.css'

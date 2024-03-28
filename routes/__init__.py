@@ -18,7 +18,6 @@ routes_config: RoutesType  = {
         paths.movies_api: MoviesApiController.get_all,
         paths.movies_api_one: MoviesApiController.get_one,
 
-        paths.movies_one: MoviesController.get_one,
         paths.movies: MoviesController.get_all,
 
         paths.styles: AssetsController.get_styles,

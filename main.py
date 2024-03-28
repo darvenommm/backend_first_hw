@@ -1,10 +1,15 @@
 from http.server import HTTPServer
+from os import environ
+
 from request_handler import CustomHttpRequestHandler
+from dotenv import load_dotenv
+load_dotenv('.env')
 
-import config
 
+HOST = environ.get('SERVER_HOST', '127.0.0.1')
+PORT = int(environ.get('SERVER_PORT', '8000'))
 
-server = HTTPServer(config.SOCKET, CustomHttpRequestHandler)
+server = HTTPServer((HOST, PORT), CustomHttpRequestHandler)
 
 
 try:

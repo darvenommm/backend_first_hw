@@ -1,8 +1,7 @@
 from typing import cast, TypedDict, Required, TypeAlias
+from os import environ
 
 import requests
-
-import config
 
 
 class MovieBaseType(TypedDict):
@@ -40,13 +39,19 @@ class MovieApi:
         use_title: bool = True,
         params: dict[str, str] = dict()
     ):
+        MOVIES_API_URL = 'http://www.omdbapi.com/'
+        API_KEY = environ.get('MOVIES_API_KEY')
         request_key = 's' if is_search else ('t' if use_title else 'i')
 
-        return requests.get(config.MOVIES_API_URL, {
-            'apikey': config.MOVIES_API_KEY,
+        if API_KEY is None:
+            raise ValueError('Not found MOVIES_API_KEY in env file!')
+
+        return requests.get(MOVIES_API_URL, {
+            'apikey': API_KEY,
             'type': 'movie',
             'plot': 'full',
             'r': 'json',
+
             request_key: identifier,
             **params,
         })

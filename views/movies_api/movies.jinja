@@ -21,6 +21,13 @@
         <a href="{{ paths.movies_api }}/{{ movie.imdbID }}">Go to Movie</a>
       </div>
       </p>
+      <form method="post" actions="{{ paths.movies }}">
+        <input type="hidden" name="title" value="{{ movie.title }}">
+        <input type="hidden" name="year" value="{{ movie.year }}">
+        <input type="hidden" name="imdb" value="{{ movie.imdbID }}">
+        <input type="hidden" name="poster" value="{{ movie.poster }}">
+        <button type="submit">Add movie to my favorites</button>
+      </form>
     </li>
   {% endfor %}
   </ul>

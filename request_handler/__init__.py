@@ -11,6 +11,7 @@ class CustomHttpRequestHandler(BaseHTTPRequestHandler):
         def outer(_: Callable[[BaseHTTPRequestHandler], None]) -> Callable:
             def inner(request: BaseHTTPRequestHandler) -> None:
                 for path, handler in routes.get(method.upper(), {}).items():
+                    print('routes', request, request.path)
                     request_path = request.path.split('?')[0]
                     request_path = request_path.rstrip() if request_path != '/' else request_path
                     if bool(re.match(path, request_path)):
