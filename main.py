@@ -14,6 +14,7 @@ server = HTTPServer((env.SERVER_HOST, env.SERVER_PORT), Server)
 
 
 try:
+    print('start')
     server.serve_forever()
 except Exception as exception:
     print(str(exception))

@@ -25,10 +25,6 @@ config = context.config
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-
-from os import environ
-print(environ.get('DB_PASSWORD'))
-
 config.set_main_option('sqlalchemy.url', get_db_url_connection())
 
 # add your model's MetaData object here

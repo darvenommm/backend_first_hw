@@ -11,5 +11,5 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{html,jinja,css,yml,yaml}]
+[*.{html,jinja,css,yml,yaml,sh}]
 indent_size = 2
