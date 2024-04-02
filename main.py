@@ -1,15 +1,16 @@
 from http.server import HTTPServer
-from os import environ
 
-from request_handler import CustomHttpRequestHandler
-from dotenv import load_dotenv
-load_dotenv('.env')
+from sys import path
+from os import getcwd, environ
+from pathlib import Path
+environ['SERVER_PATH'] = Path(getcwd(), 'server').as_posix()
+path.append(environ['SERVER_PATH'])
+
+from server import Server
+from utils.env_variable import env
 
 
-HOST = environ.get('SERVER_HOST', '127.0.0.1')
-PORT = int(environ.get('SERVER_PORT', '8000'))
-
-server = HTTPServer((HOST, PORT), CustomHttpRequestHandler)
+server = HTTPServer((env.SERVER_HOST, env.SERVER_PORT), Server)
 
 
 try:

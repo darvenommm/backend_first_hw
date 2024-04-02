@@ -1,0 +1,6 @@
+{% extends "base.jinja" %}
+{% from "movies/components/movies_list.jinja" import movies_list %}
+
+{% block main %}
+  {{ movies_list(paths, movies) }}
+{% endblock main %}
