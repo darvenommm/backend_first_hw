@@ -1,8 +1,8 @@
 """init: movies
 
-Revision ID: ee932383ea4d
+Revision ID: 9dcac04a52fd
 Revises: 
-Create Date: 2024-04-02 22:27:18.090808
+Create Date: 2024-04-03 10:24:51.890594
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'ee932383ea4d'
+revision: str = '9dcac04a52fd'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,7 +27,6 @@ def upgrade() -> None:
     sa.Column('plot', sa.String(), nullable=False),
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.CheckConstraint("imdb ~ '^tt\\d{7}$'", name='check_movies_imdb_regex'),
-    sa.CheckConstraint("poster = 'N/A' OR poster ~ '^https?:\\/\\/(?NULL\\.)?[-a-zA-Z0-9@:%%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%%_\\+.~#?&\\/=]*)$'", name='check_movies_imdb_poster'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('imdb', name='unique_movies_imdb'),
     sa.UniqueConstraint('title', name='unique_movies_title')

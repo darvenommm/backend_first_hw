@@ -1,26 +1,30 @@
 {% macro movies_list(paths, movies) -%}
   <h1>Movies</h1>
   <div class="movies-api">
-    <ul class="movies-api__list">
-    {% for movie in movies %}
-      <li class="movies-api__item">
-        {% if movie.poster != 'N/A' %}
-        <img src="{{ movie.poster }}" alt="poster" height="475">
-        {% else %}
-        <p>Not have the poster</p>
-        {% endif %}
-        <h2>{{ movie.title }}</h2>
-        <p>Year: {{ movie.year }}</p>
-        <div class="movies-api__item-bottom">
-          <a href="{{ paths.movies }}/{{ movie.imdbID }}">Go to Movie</a>
-        </div>
-        </p>
-        <form method="post" action="{{ paths.home }}">
-          <input type="hidden" name="imdbID" value="{{ movie.imdbID }}">
-          <button type="submit">Add movie to my favorites</button>
-        </form>
-      </li>
-    {% endfor %}
-    </ul>
+    {% if movies %}
+      <ul class="movies-api__list">
+        {% for movie in movies %}
+        <li class="movies-api__item">
+          {% if movie.poster != 'N/A' %}
+          <img src="{{ movie.poster }}" alt="poster" height="475">
+          {% else %}
+          <p>Not have the poster</p>
+          {% endif %}
+          <h2>{{ movie.title }}</h2>
+          <p>Year: {{ movie.year }}</p>
+          <div class="movies-api__item-bottom">
+            <a href="{{ paths.movies }}/{{ movie.imdbID }}">Go to Movie</a>
+          </div>
+          </p>
+          <form method="post" action="{{ paths.my_movies }}">
+            <input type="hidden" name="imdbID" value="{{ movie.imdbID }}">
+            <button type="submit">Add movie to my favorites</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Not have movies for viewing</p>
+    {% endif %}
   </div>
 {%- endmacro %}

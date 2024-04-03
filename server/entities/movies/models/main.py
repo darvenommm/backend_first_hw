@@ -6,6 +6,7 @@ from db import DB
 
 from common.regex import regex
 from utils.db import UUIDIdMixin
+from entities.movies.types import MyMovieType
 
 
 class Movies(UUIDIdMixin, DB):
@@ -16,18 +17,23 @@ class Movies(UUIDIdMixin, DB):
     poster: MappedColumn[str]
     plot: MappedColumn[str]
 
+    @classmethod
+    def get_movies(cls):
+        with DB.get_session() as session:
+            return session.scalars(select(cls)).all()
+
+    @classmethod
+    def add(cls, params: MyMovieType) -> None:
+        with DB.get_session() as session:
+            session.add(cls(**params))
+            session.commit()
+
     __table_args__ = (
         CheckConstraint(
             f"imdb ~ '^{regex.IMDB}$'",
             name='check_movies_imdb_regex',
         ),
-        CheckConstraint(
-            f"poster = 'N/A' OR poster ~ '{regex.URL}'",
-            name='check_movies_imdb_poster',
-        ),
 
         UniqueConstraint('title', name='unique_movies_title'),
         UniqueConstraint('imdb', name='unique_movies_imdb'),
     )
-
-__all__ = ('Movies',)

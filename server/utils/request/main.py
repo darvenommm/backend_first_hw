@@ -22,7 +22,7 @@ class Request:
             return ''
 
     @staticmethod
-    def get_post_data(request: HTTPRequest) -> dict[str, str]:
+    def parse_urlencoded(request: HTTPRequest) -> dict[str, str]:
         content_length = int(request.headers.get('Content-Length', 0))
         post_data = request.rfile.read(content_length).decode()
 

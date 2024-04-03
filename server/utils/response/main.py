@@ -6,38 +6,61 @@ from common.http_statuses import http_statuses
 
 class Response:
     @staticmethod
+    def set_response(
+        request: HttpRequest,
+        status: int,
+        headers: list[tuple[str, str]] = list(),
+        body: str = '',
+        content_type: str | None = 'text/html',
+    ) -> None:
+        request.send_response(status)
+
+        if content_type:
+            request.send_header('Content-type', content_type)
+
+        for header in headers:
+            request.send_header(*header)
+        else:
+            request.end_headers()
+
+        if body:
+            request.wfile.write(body.encode())
+
+
+    @classmethod
     def load_page(
+        cls,
         request: HttpRequest,
         body: str = '',
         status: int = http_statuses.OK,
         headers: list[tuple[str, str]] = list(),
     ) -> None:
-        request.send_response(status)
-        request.send_header('Content-type', 'text/html')
+        cls.set_response(request, status, headers, body)
 
-        for header in headers:
-            request.send_header(*header)
-        else:
-            request.end_headers()
 
-        request.wfile.write(body.encode())
-
-    @staticmethod
+    @classmethod
     def send_bad_request(
+        cls,
         request: HttpRequest,
         error_message: str = 'Bad User Request',
         status: int = http_statuses.USER_BAD,
         headers: list[tuple[str, str]] = list(),
     ) -> None:
-        request.send_response(status)
-        request.send_header('Content-type', 'text/html')
+        page = Render.render_template('pages/error', error_message=error_message)
+        cls.set_response(request, status, headers, page)
 
-        for header in headers:
-            request.send_header(*header)
+
+    @classmethod
+    def redirect(
+        cls,
+        request: HttpRequest,
+        url: str,
+        status: int = http_statuses.REDIRECT_FOUND,
+        headers: list[tuple[str, str]] = list(),
+    ) -> None:
+        if status // 100 == 3:
+            headers.append(('Location', url))
         else:
-            request.end_headers()
+            headers.append(('Refresh', f'0; {url}'))
 
-        request.wfile.write(
-            Render.render_template('pages/error', error_message=error_message).encode()
-        )
-
+        cls.set_response(request, status, headers, content_type=None)

@@ -10,9 +10,9 @@ services:
       - POSTGRES_PASSWORD=$DB_PASSWORD
     healthcheck:
       test: pg_isready -U $DB_USERNAME -d $DB_NAME
-      interval: 10s
-      timeout: 10s
-      retries: 20
+      interval: 1s
+      timeout: 1s
+      retries: 120
     networks:
       - net
 

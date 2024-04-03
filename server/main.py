@@ -8,9 +8,7 @@ from routes import routes
 
 
 class CustomHttpRequestHandler(BaseHTTPRequestHandler):
-    methods: tuple[HttpMethodsType, ...] = (
-        'GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE',
-    )
+    methods: tuple[HttpMethodsType, ...] = ('GET', 'POST', 'DELETE')
 
     @staticmethod
     def add_routes(method: HttpMethodsType) -> Callable:

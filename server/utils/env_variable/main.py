@@ -19,6 +19,7 @@ DB_PASSWORD = environ.get('DB_PASSWORD', '')
 SERVER_PATH = environ.get('SERVER_PATH', '')
 MOVIES_API_KEY = environ.get('MOVIES_API_KEY', '')
 
+
 if not DB_PASSWORD:
     raise NotFoundEnvVariable('DB_PASSWORD')
 

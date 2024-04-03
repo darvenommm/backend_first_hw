@@ -5,5 +5,5 @@
 {%- endblock title %}
 
 {% block main -%}
-  <p class="error">{{ error_message }}</p>
+  <p class="error">{{ error_message|default('User bad request') }}</p>
 {%- endblock main %}
