@@ -1,24 +1,24 @@
 {% extends "base.jinja" %}
 
 {% block main %}
-  <div class="movie">
-    {% if movie.poster != "N/A" %}
-      <img src="{{ movie.poster }}" alt="movie poster.">
-    {% else %}
-      <p>Not have a poster</p>
-    {% endif %}
-    <div class="movie__parameters-container">
-      <h1>{{ movie.title }}</h1>
-      <p>Year: {{ movie.year }}</p>
-      <p>imdbID: {{ movie.imdbID }}</p>
-      <p>Rated: {{ movie.rated }}</p>
-      <p>Released: {{ movie.released }}</p>
-      <p>Runtime: {{ movie.runtime }}</p>
-      <p>Genre: {{ movie.genre }}</p>
-      <p>Director: {{ movie.director }}</p>
-      <p>Actors: {{ movie.actors }}</p>
-      <p>Plot: {{ movie.plot }}</p>
-      <p>Metascore: {{ movie.metascore }}</p>
-    </div>
+<div class="movie">
+  {% if movie.poster != "N/A" %}
+    <img src="{{ movie.poster }}" alt="movie poster.">
+  {% else %}
+    <p>Not have a poster</p>
+  {% endif %}
+  <div class="movie__parameters-container">
+    <h1>{{ movie.title }}</h1>
+    <p>Year: {{ movie.year }}</p>
+    <p>imdbID: {{ movie.imdbID }}</p>
+    <p>Rated: {{ movie.rated }}</p>
+    <p>Released: {{ movie.released }}</p>
+    <p>Runtime: {{ movie.runtime }}</p>
+    <p>Genre: {{ movie.genre }}</p>
+    <p>Director: {{ movie.director }}</p>
+    <p>Actors: {{ movie.actors }}</p>
+    <p>Plot: {{ movie.plot }}</p>
+    <p>Metascore: {{ movie.metascore }}</p>
   </div>
+</div>
 {% endblock main %}

@@ -4,7 +4,7 @@ from typing import TypeAlias, Callable
 from entities.movies.controllers import MoviesController
 from entities.static.controllers import StaticController
 
-from common.http_statuses import HttpMethodsType
+from common.http import HttpMethodsType
 from paths import Paths
 
 

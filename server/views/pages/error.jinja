@@ -1,9 +1,5 @@
 {% extends "base.jinja" %}
 
-{% block title -%}
-  Error
-{%- endblock title %}
-
 {% block main -%}
-  <p class="error">{{ error_message|default('User bad request') }}</p>
+<p class="error">{{ error_message|default('User bad request') }}</p>
 {%- endblock main %}

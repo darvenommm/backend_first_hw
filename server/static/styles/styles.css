@@ -2,6 +2,11 @@ body {
   margin: 0;
 }
 
+img {
+  width: 100%;
+  height: auto;
+}
+
 .main {
   padding: 0 10px;
 }
@@ -38,7 +43,11 @@ body {
   color: inherit;
 }
 
-.movies-api__list {
+.header__link--active {
+  color: #d24444;
+}
+
+.movies__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
@@ -48,7 +57,7 @@ body {
   padding: 0;
 }
 
-.movies-api__item {
+.movies__item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,10 +69,25 @@ body {
   padding: 10px;
 }
 
-.movies-api__item > p {
+.movies__item img {
+  object-fit: cover;
+}
+
+.movies__item > p {
   margin: 10px;
 }
 
-.movies-api__item > h2 {
+.movies__item > h2 {
   margin: 15px;
+}
+
+.movie {
+  display: flex;
+  gap: 20px;
+}
+
+.movie img {
+  max-width: 35%;
+  min-width: 300px;
+  height: auto;
 }

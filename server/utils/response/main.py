@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler as HttpRequest
 
 from utils.render import Render
-from common.http_statuses import http_statuses
+from common.http import http_statuses
 
 
 class Response:
@@ -46,7 +46,7 @@ class Response:
         status: int = http_statuses.USER_BAD,
         headers: list[tuple[str, str]] = list(),
     ) -> None:
-        page = Render.render_template('pages/error', error_message=error_message)
+        page = Render.render_template('pages/error', error_message=error_message, title='Error')
         cls.set_response(request, status, headers, page)
 
 

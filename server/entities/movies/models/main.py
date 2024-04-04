@@ -1,5 +1,5 @@
 from typing import Any
-from sqlalchemy import CheckConstraint, UniqueConstraint, select
+from sqlalchemy import CheckConstraint, UniqueConstraint, select, delete
 from sqlalchemy.orm import MappedColumn
 
 from db import DB
@@ -13,9 +13,10 @@ class Movies(UUIDIdMixin, DB):
     __tablename__ = 'movies'
 
     title: MappedColumn[str]
-    imdb: MappedColumn[str]
+    imdbID: MappedColumn[str]
     poster: MappedColumn[str]
     plot: MappedColumn[str]
+    year: MappedColumn[str]
 
     @classmethod
     def get_movies(cls):
@@ -28,12 +29,22 @@ class Movies(UUIDIdMixin, DB):
             session.add(cls(**params))
             session.commit()
 
+    @classmethod
+    def delete(cls, imdbID: str) -> None:
+        with DB.get_session() as session:
+            session.execute(delete(cls).where(cls.imdbID == imdbID))
+            session.commit()
+
     __table_args__ = (
         CheckConstraint(
-            f"imdb ~ '^{regex.IMDB}$'",
-            name='check_movies_imdb_regex',
+            f"\"imdbID\" ~ '^{regex.IMDB}$'",
+            name='check_movies_imdbID_regex',
+        ),
+        CheckConstraint(
+            rf"year ~ '{regex.YEAR}'",
+            name='check_movies_year_regex',
         ),
 
         UniqueConstraint('title', name='unique_movies_title'),
-        UniqueConstraint('imdb', name='unique_movies_imdb'),
+        UniqueConstraint('imdbID', name='unique_movies_imdbID'),
     )

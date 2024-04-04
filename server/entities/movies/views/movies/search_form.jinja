@@ -1,9 +1,9 @@
 {% extends "base.jinja" %}
 
 {% block main %}
-  <form action="{{ paths.movies }}" method="get">
-    <label for="search_title">Title for searching of films</label>
-    <input id="search_title" type="text" name="search_title" pattern=".{1,64}" required>
-    <button type="submit">Find</button>
-  </form>
+<form action="{{ paths.movies }}" method="get">
+  <label for="search_title">Title for searching of films</label>
+  <input id="search_title" type="text" name="search_title" pattern=".{1,64}" required>
+  <button type="submit">Find</button>
+</form>
 {% endblock main %}

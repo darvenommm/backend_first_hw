@@ -7,13 +7,18 @@ from utils.response import Response
 from utils.request import Request
 from utils.render import Render
 from paths import Paths
-from common.http_statuses import http_statuses
+from common.http import http_statuses
 
 
 class MoviesController:
     @staticmethod
     def get_mine(request: HTTPRequest) -> None:
-        page = Render.render_template('movies/my_movies', movies=Movies.get_movies())
+        parameters = {
+            'movies': Movies.get_movies(),
+            'current_path': Paths.my_movies,
+            'title': 'My movie'
+        }
+        page = Render.render_template('movies/my_movies', **parameters)
         Response.load_page(request, page)
 
     @staticmethod
@@ -28,7 +33,8 @@ class MoviesController:
         except ValueError as exception:
             return Response.send_bad_request(request, str(exception))
 
-        Response.load_page(request, Render.render_template('movies/movies', movies=movies))
+        parameters = {'movies': movies, 'title': 'Movies'}
+        Response.load_page(request, Render.render_template('movies/movies', **parameters))
 
     @staticmethod
     def get_one(request: HTTPRequest) -> None:
@@ -37,7 +43,8 @@ class MoviesController:
         except ValueError as exception:
             return Response.send_bad_request(request, str(exception))
 
-        Response.load_page(request, Render.render_template('movies/movie', movie=movie))
+        parameters = {'movie': movie, 'title': 'Movie'}
+        Response.load_page(request, Render.render_template('movies/movie', **parameters))
 
 
     @staticmethod
@@ -58,9 +65,10 @@ class MoviesController:
 
         new_movie: MyMovieType = {
             'title': movie['title'],
-            'imdb': movie['imdbID'],
+            'imdbID': movie['imdbID'],
             'plot': movie['plot'],
             'poster': movie['poster'],
+            'year': movie['year'],
         }
 
         Movies.add(new_movie)
@@ -70,4 +78,6 @@ class MoviesController:
 
     @staticmethod
     def delete(request: HTTPRequest) -> None:
-        pass
+        Movies.delete(Request.get_last_segment(request))
+
+        Response.set_response(request, http_statuses.OK)

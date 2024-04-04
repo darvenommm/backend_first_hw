@@ -3,9 +3,10 @@ from typing import TypedDict, Required
 
 class MyMovieType(TypedDict):
     title: Required[str]
-    imdb: Required[str]
+    imdbID: Required[str]
     poster: Required[str]
     plot: Required[str]
+    year: Required[str]
 
 
 class ApiBaseMovieType(TypedDict):

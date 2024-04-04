@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import re
 from typing import Callable
 
-from common.http_statuses import HttpMethodsType
+from common.http import HttpMethodsType
 
 from routes import routes
 
