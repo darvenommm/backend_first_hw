@@ -10,7 +10,10 @@ from server import Server
 from utils.env_variable import env
 
 
-server = HTTPServer((env.SERVER_HOST, env.SERVER_PORT), Server)
+server = HTTPServer(
+    (env.SERVER_HOST, env.SERVER_PORT),
+    Server, # type: ignore
+)
 
 
 try:

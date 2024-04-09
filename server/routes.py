@@ -12,7 +12,7 @@ from paths import Paths
 RoutesType: TypeAlias = dict[HttpMethodsType, dict[str, Callable[[BaseHTTPRequestHandler], None]]]
 
 
-class Routes:
+class Routes(BaseHTTPRequestHandler):
     __routes: RoutesType  = {
         'GET': {
             Paths.home: MoviesController.get_movie_search_form,
