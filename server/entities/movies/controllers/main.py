@@ -16,7 +16,7 @@ class MoviesController:
         parameters = {
             'movies': Movies.get_movies(),
             'current_path': Paths.my_movies,
-            'title': 'My movie'
+            'title': 'My movie',
         }
         page = Render.render_template('movies/my_movies', **parameters)
         Response.load_page(request, page)
@@ -33,7 +33,7 @@ class MoviesController:
         except ValueError as exception:
             return Response.send_bad_request(request, str(exception))
 
-        parameters = {'movies': movies, 'title': 'Movies'}
+        parameters = {'movies': movies, 'title': 'Movies', 'current_path': Paths.movies}
         Response.load_page(request, Render.render_template('movies/movies', **parameters))
 
     @staticmethod
@@ -49,7 +49,8 @@ class MoviesController:
 
     @staticmethod
     def get_movie_search_form(request: HTTPRequest) -> None:
-        Response.load_page(request, Render.render_template('movies/search_form'))
+        parameters = {'current_path': Paths.home}
+        Response.load_page(request, Render.render_template('movies/search_form', **parameters))
 
     @staticmethod
     def add(request: HTTPRequest) -> None:

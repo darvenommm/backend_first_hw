@@ -44,7 +44,7 @@ img {
 }
 
 .header__link--active {
-  color: #d24444;
+  color: #2c2b2b;
 }
 
 .movies__list {
@@ -67,6 +67,7 @@ img {
   border-radius: 15px;
 
   padding: 10px;
+  min-height: 850px;
 }
 
 .movies__item img {

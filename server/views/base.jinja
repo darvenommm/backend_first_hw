@@ -10,7 +10,7 @@
     {% block head %}{% endblock head %}
   </head>
   <body>
-    {{ header(paths) }}
+    {{ header(paths, current_path) }}
     <main class="main">
       {% block main %}{% endblock main %}
     </main>

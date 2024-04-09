@@ -5,7 +5,7 @@ WORKDIR /server
 COPY ./pyproject.toml .
 
 RUN pip install poetry
-RUN poetry install
+RUN poetry install --without=dev
 
 COPY . .
 

@@ -16,9 +16,12 @@ psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 types-requests = "^2.31.0.20240311"
-alembic = "^1.13.1"
 mypy = "^1.9.0"
 py-mon = "^2.0.5"
+
+
+[tool.poetry.group.docker.dependencies]
+alembic = "^1.13.1"
 
 [build-system]
 requires = ["poetry-core"]
