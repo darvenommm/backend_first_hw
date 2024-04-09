@@ -12,3 +12,9 @@ HttpMethodsType: TypeAlias = (
     | Literal['TRACE']
     | Literal['CONNECT']
 )
+
+http_methods = (
+    'GET', 'POST', 'PUT',
+    'PATCH', 'DELETE', 'HEAD',
+    'OPTIONS', 'TRACE', 'CONNECT',
+)

@@ -74,11 +74,11 @@ class MoviesController:
 
         Movies.add(new_movie)
 
-        Response.redirect(request, Paths.my_movies, http_statuses.REDIRECT_FOUND)
+        Response.redirect(request, Paths.my_movies, http_statuses.CREATED)
 
 
     @staticmethod
     def delete(request: HTTPRequest) -> None:
         Movies.delete(Request.get_last_segment(request))
 
-        Response.set_response(request, http_statuses.OK)
+        Response.set_response(request, http_statuses.NO_CONTENT)

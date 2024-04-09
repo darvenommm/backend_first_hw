@@ -58,9 +58,6 @@ class Response:
         status: int = http_statuses.REDIRECT_FOUND,
         headers: list[tuple[str, str]] = list(),
     ) -> None:
-        if status // 100 == 3:
-            headers.append(('Location', url))
-        else:
-            headers.append(('Refresh', f'0; {url}'))
+        headers.append(('Location', url))
 
         cls.set_response(request, status, headers, content_type=None)

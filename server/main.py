@@ -1,13 +1,11 @@
 from http.server import BaseHTTPRequestHandler
 
-from common.http import HttpMethodsType
-
-from routes import Routes
+from routes import Router
 
 
-@Routes
+@Router.set_routes
 class CustomHttpRequestHandler(BaseHTTPRequestHandler):
-    methods: tuple[HttpMethodsType, ...] = ('GET', 'POST', 'DELETE')
+    pass
 
 
 __all__ = ('CustomHttpRequestHandler',)

@@ -1,18 +1,18 @@
 from http.server import BaseHTTPRequestHandler
 import re
-from typing import cast, TypeAlias, Callable
+from typing import TypeAlias, Callable
 
 from entities.movies.controllers import MoviesController
 from entities.static.controllers import StaticController
 
-from common.http import HttpMethodsType
+from common.http import HttpMethodsType, http_methods
 from paths import Paths
 
 
 RoutesType: TypeAlias = dict[HttpMethodsType, dict[str, Callable[[BaseHTTPRequestHandler], None]]]
 
 
-class Routes(BaseHTTPRequestHandler):
+class Router:
     __routes: RoutesType  = {
         'GET': {
             Paths.home: MoviesController.get_movie_search_form,
@@ -25,12 +25,9 @@ class Routes(BaseHTTPRequestHandler):
         'POST': {
             Paths.my_movies: MoviesController.add,
         },
-        'PUT': {},
-        'PATCH': {},
         'DELETE': {
             Paths.my_movie: MoviesController.delete,
         },
-        'HEAD': {},
     }
 
     @classmethod
@@ -43,19 +40,11 @@ class Routes(BaseHTTPRequestHandler):
         return inner
 
     @classmethod
-    def __add_routes(cls, http_server: type) -> type:
-        methods = cast(tuple[HttpMethodsType, ...], getattr(http_server, 'methods', tuple))
-
-        for method in methods:
+    def set_routes(cls, http_server: type) -> type:
+        for method in http_methods:
             setattr(http_server, f'do_{method}', cls.__find_handler(method))
 
         return http_server
 
-    def __init__(self, http_server: type) -> None:
-        self.__http_server = http_server
 
-    def __call__(self, *args, **kwargs) -> type:
-        return self.__add_routes(self.__http_server)(*args, **kwargs)
-
-
-__all__ = ('Routes',)
+__all__ = ('Router',)
