@@ -1,5 +1,4 @@
-from typing import TypeAlias, Literal
-
+from typing import Literal, TypeAlias
 
 HttpMethodsType: TypeAlias = (
     Literal['GET']

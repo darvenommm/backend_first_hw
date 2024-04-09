@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session
-
 from utils.db import get_db_url_connection
 
 

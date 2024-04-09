@@ -1,20 +1,17 @@
 from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from os import environ, getcwd
+from pathlib import Path
+from sys import path
 
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
-from sys import path
-from os import getcwd, environ
-from pathlib import Path
 environ['SERVER_PATH'] = Path(getcwd(), 'server').as_posix()
 path.append(environ['SERVER_PATH'])
 
 
 from db import DB
 from entities.movies.models import Movies
-
 from utils.db import get_db_url_connection
 
 # this is the Alembic Config object, which provides

@@ -1,10 +1,11 @@
 from os import environ
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
-class NotFoundEnvVariable(Exception):
+class NotFoundEnvVariableError(Exception):
     def __init__(self, variable_name: str, *args: object) -> None:
         super().__init__(f'Not found {variable_name} environment variable!', *args)
 
@@ -21,10 +22,10 @@ MOVIES_API_KEY = environ.get('MOVIES_API_KEY', '')
 
 
 if not DB_PASSWORD:
-    raise NotFoundEnvVariable('DB_PASSWORD')
+    raise NotFoundEnvVariableError('DB_PASSWORD')
 
 if not SERVER_PATH:
-    raise NotFoundEnvVariable('SERVER_PATH')
+    raise NotFoundEnvVariableError('SERVER_PATH')
 
 if not SERVER_PATH:
-    raise NotFoundEnvVariable('MOVIES_API_KEY')
+    raise NotFoundEnvVariableError('MOVIES_API_KEY')

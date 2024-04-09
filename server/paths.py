@@ -10,6 +10,3 @@ class Paths:
     my_movies = '/my-movies'
 
     styles = '/styles.css'
-
-
-__all__ = ('Paths',)

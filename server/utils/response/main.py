@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler as HttpRequest
 
-from utils.render import Render
 from common.http import http_statuses
+from utils.render import Render
 
 
 class Response:
@@ -9,7 +9,7 @@ class Response:
     def set_response(
         request: HttpRequest,
         status: int,
-        headers: list[tuple[str, str]] = list(),
+        headers: list[tuple[str, str]] | None = None,
         body: str = '',
         content_type: str | None = 'text/html',
     ) -> None:
@@ -18,14 +18,14 @@ class Response:
         if content_type:
             request.send_header('Content-type', content_type)
 
-        for header in headers:
-            request.send_header(*header)
-        else:
-            request.end_headers()
+        if headers:
+            for header in headers:
+                request.send_header(*header)
+
+        request.end_headers()
 
         if body:
             request.wfile.write(body.encode())
-
 
     @classmethod
     def load_page(
@@ -33,10 +33,9 @@ class Response:
         request: HttpRequest,
         body: str = '',
         status: int = http_statuses.OK,
-        headers: list[tuple[str, str]] = list(),
+        headers: list[tuple[str, str]] | None = None,
     ) -> None:
         cls.set_response(request, status, headers, body)
-
 
     @classmethod
     def send_bad_request(
@@ -44,11 +43,10 @@ class Response:
         request: HttpRequest,
         error_message: str = 'Bad User Request',
         status: int = http_statuses.USER_BAD,
-        headers: list[tuple[str, str]] = list(),
+        headers: list[tuple[str, str]] | None = None,
     ) -> None:
         page = Render.render_template('pages/error', error_message=error_message, title='Error')
         cls.set_response(request, status, headers, page)
-
 
     @classmethod
     def redirect(
@@ -56,8 +54,8 @@ class Response:
         request: HttpRequest,
         url: str,
         status: int = http_statuses.REDIRECT_FOUND,
-        headers: list[tuple[str, str]] = list(),
+        headers: list[tuple[str, str]] | None = None,
     ) -> None:
-        headers.append(('Location', url))
+        headers = [('Location', url)]
 
         cls.set_response(request, status, headers, content_type=None)

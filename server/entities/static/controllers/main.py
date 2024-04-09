@@ -1,6 +1,5 @@
-from os import getcwd
-
 from http.server import BaseHTTPRequestHandler as HTTPRequest
+from os import getcwd
 
 
 class StaticController:

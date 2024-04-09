@@ -1,13 +1,13 @@
 from http.server import BaseHTTPRequestHandler as HTTPRequest
 
-from entities.movies.models import Movies
-from entities.movies.api import MoviesApi
-from entities.movies.types import MyMovieType
-from utils.response import Response
-from utils.request import Request
-from utils.render import Render
-from paths import Paths
 from common.http import http_statuses
+from entities.movies.api import MoviesApi
+from entities.movies.models import Movies
+from entities.movies.types import MyMovieType
+from paths import Paths
+from utils.render import Render
+from utils.request import Request
+from utils.response import Response
 
 
 class MoviesController:
@@ -45,7 +45,6 @@ class MoviesController:
 
         parameters = {'movie': movie, 'title': 'Movie'}
         Response.load_page(request, Render.render_template('movies/movie', **parameters))
-
 
     @staticmethod
     def get_movie_search_form(request: HTTPRequest) -> None:

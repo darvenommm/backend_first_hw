@@ -1,8 +1,7 @@
-from typing import cast, TypeAlias, NoReturn, Literal, Any
+from typing import Any, Literal, NoReturn, TypeAlias, cast
 
 import requests
-
-from entities.movies.types import ApiSearchedMovieType, ApiMovieType
+from entities.movies.types import ApiMovieType, ApiSearchedMovieType
 from utils.env_variable import env
 
 

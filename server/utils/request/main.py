@@ -9,10 +9,10 @@ class Request:
         if '?' not in request.path:
             return {}
 
-        return {
-            key: value for (key, value)
-            in (couple.split('=') for couple in request.path.split('?')[1].split('&'))
-        }
+        query_string = request.path.split('?')[1]
+        query_couples = (couple.split('=') for couple in query_string.split('&'))
+
+        return {query_key: query_value for (query_key, query_value) in query_couples}
 
     @staticmethod
     def get_last_segment(request: HTTPRequest) -> str:
@@ -26,4 +26,4 @@ class Request:
         content_length = int(request.headers.get('Content-Length', 0))
         post_data = request.rfile.read(content_length).decode()
 
-        return {key: value for (key, value) in parse_qsl(post_data)}
+        return {field_name: field_value for (field_name, field_value) in parse_qsl(post_data)}

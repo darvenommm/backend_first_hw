@@ -1,12 +1,11 @@
 from typing import Any
-from sqlalchemy import CheckConstraint, UniqueConstraint, select, delete
-from sqlalchemy.orm import MappedColumn
-
-from db import DB
 
 from common.regex import regex
-from utils.db import UUIDIdMixin
+from db import DB
 from entities.movies.types import MyMovieType
+from sqlalchemy import CheckConstraint, UniqueConstraint, delete, select
+from sqlalchemy.orm import MappedColumn
+from utils.db import UUIDIdMixin
 
 
 class Movies(UUIDIdMixin, DB):
