@@ -14,11 +14,11 @@
       <h2>{{ movie.title }}</h2>
       <p>Year: {{ movie.year }}</p>
       <div class="movies__item-bottom">
-        <a href="{{ paths.movies }}/{{ movie.imdbID }}">Go to Movie</a>
+        <a href="{{ paths.movies }}/{{ movie.imdb }}">Go to Movie</a>
       </div>
       </p>
       <form method="post" action="{{ paths.my_movies }}">
-        <input type="hidden" name="imdbID" value="{{ movie.imdbID }}">
+        <input type="hidden" name="imdb" value="{{ movie.imdb }}">
         <button type="submit">Add movie to my favorites</button>
       </form>
     </li>

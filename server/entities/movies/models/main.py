@@ -1,10 +1,10 @@
-from typing import Any
+from typing import Optional
 
 from common.regex import regex
 from db import DB
 from entities.movies.types import MyMovieType
-from sqlalchemy import CheckConstraint, UniqueConstraint, delete, select
-from sqlalchemy.orm import MappedColumn
+from sqlalchemy import CheckConstraint, UniqueConstraint, delete, select, update  # noqa: I001, I005
+from sqlalchemy.orm import MappedColumn, mapped_column  # noqa: I005
 from utils.db import UUIDIdMixin
 
 
@@ -12,10 +12,11 @@ class Movies(UUIDIdMixin, DB):
     __tablename__ = 'movies'
 
     title: MappedColumn[str]
-    imdbID: MappedColumn[str]
+    imdb: MappedColumn[str]
     poster: MappedColumn[str]
     plot: MappedColumn[str]
     year: MappedColumn[str]
+    note: MappedColumn[Optional[str]] = mapped_column(default='')
 
     @classmethod
     def get_movies(cls):
@@ -23,21 +24,28 @@ class Movies(UUIDIdMixin, DB):
             return session.scalars(select(cls)).all()
 
     @classmethod
-    def add(cls, params: MyMovieType) -> None:
+    def add(cls, fields: MyMovieType) -> None:
         with DB.get_session() as session:
-            session.add(cls(**params))
+            session.add(cls(**fields))
             session.commit()
 
     @classmethod
-    def delete(cls, imdbID: str) -> None:
+    def delete(cls, imdb: str) -> None:
         with DB.get_session() as session:
-            session.execute(delete(cls).where(cls.imdbID == imdbID))
+            session.execute(delete(cls).where(cls.imdb == imdb))
+            session.commit()
+
+    @classmethod
+    def update_note(cls, imdb: str, new_note: str) -> None:
+        with DB.get_session() as session:
+            query = update(cls).where(cls.imdb == imdb).values(note=new_note)
+            session.execute(query)
             session.commit()
 
     __table_args__ = (
         CheckConstraint(
-            f"\"imdbID\" ~ '^{regex.IMDB}$'",
-            name='check_movies_imdbID_regex',
+            f"\"imdb\" ~ '^{regex.IMDB}$'",
+            name='check_movies_imdb_regex',
         ),
         CheckConstraint(
             rf"year ~ '{regex.YEAR}'",
@@ -45,5 +53,5 @@ class Movies(UUIDIdMixin, DB):
         ),
 
         UniqueConstraint('title', name='unique_movies_title'),
-        UniqueConstraint('imdbID', name='unique_movies_imdbID'),
+        UniqueConstraint('imdb', name='unique_movies_imdb'),
     )

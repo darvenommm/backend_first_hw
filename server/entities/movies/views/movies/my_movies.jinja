@@ -1,12 +1,16 @@
 {% extends "base.jinja" %}
 
+{% block head %}
+<script src="/movies.js" defer></script>
+{% endblock head %}
+
 {% block main %}
 <h1>My movies</h1>
 <div class="movies">
   {% if movies %}
     <ul class="movies__list">
       {% for movie in movies %}
-      <li class="movies__item">
+      <li class="movies__item" data-imdb="{{ movie.imdb }}">
         {% if movie.poster != 'N/A' %}
         <img src="{{ movie.poster }}" alt="poster">
         {% else %}
@@ -14,11 +18,15 @@
         {% endif %}
         <h2>{{ movie.title }}</h2>
         <p>Year: {{ movie.year }}</p>
-        <div class="movies__item-bottom">
-          <a href="{{ paths.movies }}/{{ movie.imdbID }}">Go to Movie</a>
-        </div>
+        <form class="movies__form">
+          <label for="movies__note">Note:</label>
+          <textarea class="movies_note" id="movies__note">{{ movie.note }}</textarea>
+          <button class="movies__update" type="button">Save</button>
+        </form>
+        <p class="movies__item-bottom">
+          <a href="{{ paths.movies }}/{{ movie.imdb }}">Go to Movie</a>
         </p>
-        <button class="movies__delete" type="button" data-imdbID="{{ movie.imdbID }}">
+        <button class="movies__delete" type="button">
           Delete from my favorites
         </button>
       </li>
@@ -29,18 +37,3 @@
   {% endif %}
 </div>
 {% endblock main %}
-
-{% block body_end %}
-<script>
-  const deleteButtons = document.querySelectorAll('.movies__delete');
-
-  deleteButtons.forEach((deleteButton) => {
-    deleteButton.addEventListener('click', () => {
-      console.log('imdbID', deleteButton.dataset)
-      fetch(`{{ paths.my_movies }}/${deleteButton.dataset.imdbid}`, { method: 'DELETE' })
-      .then(() => location.reload())
-      .catch((error) => console.log(error));
-    });
-  });
-</script>
-{% endblock body_end %}

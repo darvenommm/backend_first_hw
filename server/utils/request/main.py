@@ -1,3 +1,4 @@
+import json
 from http.server import BaseHTTPRequestHandler as HTTPRequest
 from typing import Any
 from urllib.parse import parse_qsl
@@ -27,3 +28,10 @@ class Request:
         post_data = request.rfile.read(content_length).decode()
 
         return {field_name: field_value for (field_name, field_value) in parse_qsl(post_data)}
+
+    @staticmethod
+    def parse_json(request: HTTPRequest) -> dict[str, str]:
+        content_length = int(request.headers.get('Content-Length', 0))
+        json_string = request.rfile.read(content_length)
+
+        return json.loads(json_string)

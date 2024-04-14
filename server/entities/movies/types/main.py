@@ -1,24 +1,25 @@
-from typing import Required, TypedDict
+from typing import NotRequired, Required, TypedDict
 
 
 class MyMovieType(TypedDict):
     title: Required[str]
-    imdbID: Required[str]
+    imdb: Required[str]
     poster: Required[str]
     plot: Required[str]
     year: Required[str]
+    note: NotRequired[str]
 
 
 class ApiBaseMovieType(TypedDict):
     title: Required[str]
-    imdbID: Required[str]
+    imdb: Required[str]
     year: Required[str]
     poster: Required[str]
     type: Required[str]
 
 
 class ApiSearchedMovieType(ApiBaseMovieType):
-    pass
+    """"""
 
 
 class ApiMovieType(ApiBaseMovieType):

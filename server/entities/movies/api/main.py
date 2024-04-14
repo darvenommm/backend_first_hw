@@ -10,6 +10,7 @@ class MoviesRequestTypes:
     title: Literal['get_by_title'] = 'get_by_title'
     imdb: Literal['get_by_imdb'] = 'get_by_imdb'
 
+
 MoviesRequestType: TypeAlias = (
     Literal['search']
     | Literal['get_by_title']
@@ -18,12 +19,36 @@ MoviesRequestType: TypeAlias = (
 
 
 class MoviesApi:
-    MOVIES_API_URL = 'http://www.omdbapi.com/'
-    MOVIES_API_KEY = env.MOVIES_API_KEY
+    movies_api_url = 'http://www.omdbapi.com/'
+    movies_api_key = env.MOVIES_API_KEY
 
     @classmethod
-    def __get_movies(cls, value: str, request_type: MoviesRequestType, **kwargs) \
-            -> list[dict] | dict[str, Any] | NoReturn:
+    def search_movies(cls, title: str) -> list[ApiSearchedMovieType] | NoReturn:
+        movies = cast(list, cls.__get_movies(title, MoviesRequestTypes.search))
+        movies_result: list[ApiSearchedMovieType] = []
+
+        for movie in movies:
+            movies_result.append(cast(ApiSearchedMovieType, cls.__transform_api_movie(movie)))
+
+        return movies_result
+
+    @classmethod
+    def get_movie_by_title(cls, title: str) -> ApiMovieType | NoReturn:
+        movie = cast(dict[str, Any], cls.__get_movies(title, MoviesRequestTypes.title))
+        return cast(ApiMovieType, cls.__transform_api_movie(movie))
+
+    @classmethod
+    def get_movie_by_imdb(cls, imdb: str) -> ApiMovieType | NoReturn:
+        movie = cast(dict[str, Any], cls.__get_movies(imdb, MoviesRequestTypes.imdb))
+        return cast(ApiMovieType, cls.__transform_api_movie(movie))
+
+    @classmethod
+    def __get_movies(
+        cls,
+        identifier: str,
+        request_type: MoviesRequestType,
+        **kwargs,
+    ) -> list[dict] | dict[str, Any] | NoReturn:
         match request_type:
             case MoviesRequestTypes.search:
                 request_type_in_settings = 's'
@@ -33,15 +58,22 @@ class MoviesApi:
                 request_type_in_settings = 'i'
 
         request_settings = {
-            'apikey': cls.MOVIES_API_KEY,
+            'apikey': cls.movies_api_key,
             'type': 'movie',
             'plot': 'full',
             'r': 'json',
-            request_type_in_settings: value,
+            request_type_in_settings: identifier,
             **kwargs,
         }
 
-        request_result = cast(dict, requests.get(cls.MOVIES_API_URL, request_settings).json())
+        request_result = cast(
+            dict,
+            requests.get(
+                cls.movies_api_url,
+                request_settings,
+                timeout=10,
+            ).json(),
+        )
         request_status = request_result.get('Response', 'False')
 
         if request_status == 'False':
@@ -55,29 +87,11 @@ class MoviesApi:
 
     @staticmethod
     def __transform_api_movie(movie: dict[str, Any]) -> dict[str, Any]:
-        result: dict[str, Any] = {}
+        result_movie: dict[str, Any] = {}
 
-        for (key, value) in movie.items():
-            result[key[0].lower() + key[1:] if len(key) > 0 else key] = value
+        for (movie_key, movie_value) in movie.items():
+            movie_key = movie_key[0].lower() + movie_key[1:]
+            movie_key = 'imdb' if movie_key == 'imdbID' else movie_key
+            result_movie[movie_key] = movie_value
 
-        return result
-
-    @classmethod
-    def search_movies(cls, title: str) -> list[ApiSearchedMovieType] | NoReturn:
-        movies = cast(list, cls.__get_movies(title, MoviesRequestTypes.search))
-        result: list[ApiSearchedMovieType] = []
-
-        for movie in movies:
-            result.append(cast(ApiSearchedMovieType, cls.__transform_api_movie(movie)))
-
-        return result
-
-    @classmethod
-    def get_movie_by_title(cls, title: str) -> ApiMovieType | NoReturn:
-        movie = cast(dict[str, Any], cls.__get_movies(title, MoviesRequestTypes.title))
-        return cast(ApiMovieType, cls.__transform_api_movie(movie))
-
-    @classmethod
-    def get_movie_by_imdb(cls, imdb: str) -> ApiMovieType | NoReturn:
-        movie = cast(dict[str, Any], cls.__get_movies(imdb, MoviesRequestTypes.imdb))
-        return cast(ApiMovieType, cls.__transform_api_movie(movie))
+        return result_movie

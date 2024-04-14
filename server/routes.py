@@ -11,38 +11,45 @@ RoutesControllerHandler = Callable[[BaseHTTPRequestHandler], None]
 RoutesType: TypeAlias = dict[HttpMethodsType, dict[str, RoutesControllerHandler]]
 
 
+routes: RoutesType = {
+    'GET': {
+        Paths.home: MoviesController.load_search_form,
+        Paths.movies: MoviesController.load_all,
+        Paths.movie: MoviesController.load_one,
+        Paths.my_movies: MoviesController.load_mine,
+
+        Paths.styles: StaticController.load_styles,
+        Paths.movies_js: StaticController.load_movies_js,
+    },
+    'POST': {
+        Paths.my_movies: MoviesController.add,
+    },
+    'DELETE': {
+        Paths.my_movie: MoviesController.delete,
+    },
+    'PATCH': {
+        Paths.my_movie: MoviesController.update,
+    },
+}
+
+
 class Router:
-    __routes: RoutesType = {
-        'GET': {
-            Paths.home: MoviesController.get_movie_search_form,
-            Paths.movies: MoviesController.get_all,
-            Paths.movie: MoviesController.get_one,
-            Paths.my_movies: MoviesController.get_mine,
-
-            Paths.styles: StaticController.get_styles,
-        },
-        'POST': {
-            Paths.my_movies: MoviesController.add,
-        },
-        'DELETE': {
-            Paths.my_movie: MoviesController.delete,
-        },
-    }
-
     @classmethod
-    def __find_handler(cls, method: HttpMethodsType) -> Callable:
+    def add_routing(cls, http_server: type) -> type:
+        for method in http_methods:
+            setattr(http_server, f'do_{method}', cls.__create_method_handler(method))
+
+        return http_server
+
+    @staticmethod
+    def __create_method_handler(method: HttpMethodsType) -> Callable:
         def inner(request: BaseHTTPRequestHandler) -> None:
-            for (path, controller_handler) in cls.__routes.get(method, {}).items():
+            for (path, controller_handler) in routes.get(method, {}).items():
+                path = path.rstrip('/')
                 given_path = request.path.split('?')[0].rstrip('/')
-                checking_path = rf'^{path.rstrip('/')}$'
+
+                checking_path = rf'^{path}$'
 
                 if bool(re.match(checking_path, given_path)):
                     return controller_handler(request)
         return inner
-
-    @classmethod
-    def add_routing(cls, http_server: type) -> type:
-        for method in http_methods:
-            setattr(http_server, f'do_{method}', cls.__find_handler(method))
-
-        return http_server

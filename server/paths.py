@@ -10,3 +10,4 @@ class Paths:
     my_movies = '/my-movies'
 
     styles = '/styles.css'
+    movies_js = '/movies.js'
