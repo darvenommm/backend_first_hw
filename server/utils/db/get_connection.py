@@ -1,7 +1,13 @@
+"""Module with get connection to db."""
 from utils.env_variable import env
 
 
 def get_db_url_connection() -> str:
+    """Get db url for connection.
+
+    Returns:
+        str: db url connection.
+    """
     connection_string = 'postgresql+psycopg2://{username}:{password}@{host}:{port}/{db_name}'
 
     return connection_string.format(

@@ -1,29 +1,29 @@
-from pathlib import Path
-
+"""Module with a helper class for work with render html template."""
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from paths import Paths
-from utils.env_variable import env
-
-
-def add_new_template_directory(*paths: str) -> 'Path':
-    total_path = Path(env.SERVER_PATH)
-
-    for path in paths:
-        total_path /= path
-
-    return total_path
-
+from utils.path import PathsHelper
 
 jinja_env = Environment(
     loader=FileSystemLoader((
-        add_new_template_directory('views'),
-        add_new_template_directory('entities', 'movies', 'views'),
+        PathsHelper.create_directory_path('views'),
+        PathsHelper.create_directory_path('entities', 'movies', 'views'),
     )),
     autoescape=select_autoescape(),
 )
 
 
 class Render:
+    """Helper class for work with render html template."""
+
     @staticmethod
-    def render_template(name: str, **kwargs) -> str:
-        return jinja_env.get_template(f'{name}.jinja').render(paths=Paths, **kwargs)
+    def render_template(path: str, **kwargs) -> str:
+        """Render html template.
+
+        Args:
+            path: html template path.
+            kwargs: add extra parameters to jinja render settings.
+
+        Returns:
+            str: html page in string.
+        """
+        return jinja_env.get_template(f'{path}.jinja').render(paths=Paths, **kwargs)

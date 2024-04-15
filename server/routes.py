@@ -1,3 +1,4 @@
+"""Module with paths router."""
 import re
 from http.server import BaseHTTPRequestHandler
 from typing import Callable, TypeAlias
@@ -34,8 +35,18 @@ routes: RoutesType = {
 
 
 class Router:
+    """Class for adding routes to http_server."""
+
     @classmethod
     def add_routing(cls, http_server: type) -> type:
+        """Add routing for http_server.
+
+        Args:
+            http_server: python http server.
+
+        Returns:
+            type: modified http server.
+        """
         for method in http_methods:
             setattr(http_server, f'do_{method}', cls.__create_method_handler(method))
 
@@ -43,6 +54,14 @@ class Router:
 
     @staticmethod
     def __create_method_handler(method: HttpMethodsType) -> Callable:
+        """Create handler for http methods.
+
+        Args:
+            method: http methods.
+
+        Returns:
+            Callable: http method handler.
+        """
         def inner(request: BaseHTTPRequestHandler) -> None:
             for (path, controller_handler) in routes.get(method, {}).items():
                 path = path.rstrip('/')

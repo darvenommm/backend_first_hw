@@ -1,7 +1,10 @@
+"""Module with paths."""
 from common.regex import regex
 
 
 class Paths:
+    """Class with paths."""
+
     home = '/'
     movie = f'/movies/{regex.IMDB}'
     movies = '/movies'

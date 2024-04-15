@@ -1,3 +1,4 @@
+"""Module with MoviesController."""
 from http.server import BaseHTTPRequestHandler as HTTPRequest
 
 from common.http import http_statuses
@@ -12,8 +13,15 @@ from utils.response import Response
 
 
 class MoviesController:
+    """Class for handling http_server requests for movies."""
+
     @staticmethod
     def load_mine(request: HTTPRequest) -> None:
+        """Load page with user's movies to user.
+
+        Args:
+            request: request object from http_server.
+        """
         page_parameters = {
             'movies': Movies.get_movies(),
             'current_path': Paths.my_movies,
@@ -24,6 +32,14 @@ class MoviesController:
 
     @staticmethod
     def load_all(request: HTTPRequest) -> None:
+        """Load page to user with movies from api.
+
+        Args:
+            request: request object from http_server.
+
+        Returns:
+            None: none.
+        """
         search_title = Request.parse_queries(request).get('search_title')
 
         if not search_title:
@@ -39,6 +55,14 @@ class MoviesController:
 
     @staticmethod
     def load_one(request: HTTPRequest) -> None:
+        """Load page to user with one movie from api.
+
+        Args:
+            request: request object from http_server.
+
+        Returns:
+            None: none.
+        """
         try:
             movie = MoviesApi.get_movie_by_imdb(Request.get_last_segment(request))
         except ValueError as exception:
@@ -49,6 +73,11 @@ class MoviesController:
 
     @staticmethod
     def load_search_form(request: HTTPRequest) -> None:
+        """Load page to user with movies search form.
+
+        Args:
+            request: request object from http_server.
+        """
         page_parameters = {'current_path': Paths.home}
 
         Response.load_page(
@@ -58,6 +87,14 @@ class MoviesController:
 
     @staticmethod
     def add(request: HTTPRequest) -> None:
+        """Add movie handler.
+
+        Args:
+            request: request object from http_server.
+
+        Returns:
+            None: none.
+        """
         imdb = Request.parse_urlencoded(request).get('imdb')
 
         if not imdb:
@@ -85,12 +122,25 @@ class MoviesController:
 
     @staticmethod
     def delete(request: HTTPRequest) -> None:
+        """Delete movie.
+
+        Args:
+            request: request object from http_server.
+        """
         Movies.delete(Request.get_last_segment(request))
 
         Response.set_response(request, http_statuses.NO_CONTENT)
 
     @staticmethod
     def update(request: HTTPRequest) -> None:
+        """Update movie's note.
+
+        Args:
+            request: request object from http_server.
+
+        Returns:
+            None: none.
+        """
         imdb = Request.get_last_segment(request)
 
         try:

@@ -1,3 +1,4 @@
+"""Module with http methods."""
 from typing import Literal, TypeAlias
 
 HttpMethodsType: TypeAlias = (

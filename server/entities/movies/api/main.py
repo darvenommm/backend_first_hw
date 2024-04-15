@@ -1,3 +1,4 @@
+"""Module with MoviesApi class."""
 from typing import Any, Literal, NoReturn, TypeAlias, cast
 
 import requests
@@ -6,6 +7,8 @@ from utils.env_variable import env
 
 
 class MoviesRequestTypes:
+    """Type of movies request variants."""
+
     search: Literal['search'] = 'search'
     title: Literal['get_by_title'] = 'get_by_title'
     imdb: Literal['get_by_imdb'] = 'get_by_imdb'
@@ -19,11 +22,21 @@ MoviesRequestType: TypeAlias = (
 
 
 class MoviesApi:
+    """Class for working with movies api."""
+
     movies_api_url = 'http://www.omdbapi.com/'
     movies_api_key = env.MOVIES_API_KEY
 
     @classmethod
     def search_movies(cls, title: str) -> list[ApiSearchedMovieType] | NoReturn:
+        """Search movies by title.
+
+        Args:
+            title: movies title.
+
+        Returns:
+            list[ApiSearchedMovieType] | NoReturn: list movies or ValueError
+        """
         movies = cast(list, cls.__get_movies(title, MoviesRequestTypes.search))
         movies_result: list[ApiSearchedMovieType] = []
 
@@ -34,11 +47,27 @@ class MoviesApi:
 
     @classmethod
     def get_movie_by_title(cls, title: str) -> ApiMovieType | NoReturn:
+        """Get movie by title.
+
+        Args:
+            title: movie title.
+
+        Returns:
+            ApiMovieType | NoReturn: movie or ValueError
+        """
         movie = cast(dict[str, Any], cls.__get_movies(title, MoviesRequestTypes.title))
         return cast(ApiMovieType, cls.__transform_api_movie(movie))
 
     @classmethod
     def get_movie_by_imdb(cls, imdb: str) -> ApiMovieType | NoReturn:
+        """Get movie by imdb.
+
+        Args:
+            imdb: movie imdb.
+
+        Returns:
+            ApiMovieType | NoReturn: Movie or ValueError
+        """
         movie = cast(dict[str, Any], cls.__get_movies(imdb, MoviesRequestTypes.imdb))
         return cast(ApiMovieType, cls.__transform_api_movie(movie))
 
@@ -49,6 +78,19 @@ class MoviesApi:
         request_type: MoviesRequestType,
         **kwargs,
     ) -> list[dict] | dict[str, Any] | NoReturn:
+        """Get movies by some identifier.
+
+        Args:
+            identifier: value of movies searching.
+            request_type: type of movies searching.
+            kwargs: extra parameters for request to movies api.
+
+        Raises:
+            ValueError: If request returned with some exception.
+
+        Returns:
+            list[dict] | dict[str, Any] | NoReturn: movies list or movies or ValueError.
+        """
         match request_type:
             case MoviesRequestTypes.search:
                 request_type_in_settings = 's'

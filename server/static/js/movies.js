@@ -8,23 +8,32 @@ const deleteMovie = (imdb) => {
     .catch((error) => console.log(error));
 };
 
-const updateNote = (imdb, note) => {
+const updateNote = (imdb, note, item) => {
   fetch(`${MOVIES_URL}/${imdb}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'text/json' },
     body: JSON.stringify({ note }),
-  }).catch((error) => console.log(error));
+  })
+    .then(() => {
+      item.classList.add('movies__item--active');
+      setTimeout(
+        () => void item.classList.remove('movies__item--active'),
+        1500
+      );
+    })
+    .catch((error) => console.log(error));
 };
 
 if (list) {
   list.addEventListener('click', ({ target }) => {
-    const imdb = target.closest('li').dataset.imdb;
+    const item = target.closest('li');
+    const imdb = item.dataset.imdb;
 
     if (target.classList.contains('movies__delete')) {
       deleteMovie(imdb);
     } else if (target.classList.contains('movies__update')) {
       const note = target.closest('form').querySelector('.movies_note').value;
-      updateNote(imdb, note);
+      updateNote(imdb, note, item);
     }
   });
 }

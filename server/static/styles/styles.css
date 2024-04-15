@@ -69,6 +69,10 @@ img {
   min-height: 850px;
 }
 
+.movies__item--active {
+  outline: #38b138 solid 5px;
+}
+
 .movies__item img {
   object-fit: cover;
 }

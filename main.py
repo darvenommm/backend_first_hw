@@ -1,3 +1,4 @@
+"""Server entry point file."""
 from http.server import HTTPServer
 from os import environ, getcwd
 from pathlib import Path

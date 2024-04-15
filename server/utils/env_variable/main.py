@@ -1,3 +1,4 @@
+"""Module for working with env variables."""
 from os import environ
 
 from dotenv import load_dotenv
@@ -6,6 +7,8 @@ load_dotenv()
 
 
 class NotFoundEnvVariableError(Exception):
+    """Error for not founding env variable."""
+
     def __init__(self, variable_name: str, *args: object) -> None:
         super().__init__(f'Not found {variable_name} environment variable!', *args)
 
