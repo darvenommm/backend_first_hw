@@ -1,17 +1,18 @@
 """init: movies
 
-Revision ID: a17b6552a7da
+Revision ID: 92ca083140d8
 Revises: 
-Create Date: 2024-04-14 15:53:03.867741
+Create Date: 2024-04-15 23:19:28.046623
 
 """
 from typing import Sequence, Union
 
-import sqlalchemy as sa
 from alembic import op
+import sqlalchemy as sa
+
 
 # revision identifiers, used by Alembic.
-revision: str = 'a17b6552a7da'
+revision: str = '92ca083140d8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None

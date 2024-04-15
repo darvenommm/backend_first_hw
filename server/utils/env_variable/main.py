@@ -20,15 +20,11 @@ DB_HOST = environ.get('DB_HOST', '127.0.0.1')
 DB_PORT = int(environ.get('DB_PORT', '5432'))
 DB_USERNAME = environ.get('DB_USERNAME', 'postgres')
 DB_PASSWORD = environ.get('DB_PASSWORD', '')
-SERVER_PATH = environ.get('SERVER_PATH', '')
 MOVIES_API_KEY = environ.get('MOVIES_API_KEY', '')
 
 
 if not DB_PASSWORD:
     raise NotFoundEnvVariableError('DB_PASSWORD')
 
-if not SERVER_PATH:
-    raise NotFoundEnvVariableError('SERVER_PATH')
-
-if not SERVER_PATH:
+if not MOVIES_API_KEY:
     raise NotFoundEnvVariableError('MOVIES_API_KEY')

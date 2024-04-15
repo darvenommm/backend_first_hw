@@ -1,11 +1,10 @@
 """Server entry point file."""
 from http.server import HTTPServer
-from os import environ, getcwd
+from os import getcwd
 from pathlib import Path
 from sys import path
 
-environ['SERVER_PATH'] = Path(getcwd(), 'server').as_posix()
-path.append(environ['SERVER_PATH'])
+path.append(Path(getcwd(), 'server').as_posix())
 
 from utils.env_variable import env
 

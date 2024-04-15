@@ -5,8 +5,8 @@ from utils.path import PathsHelper
 
 jinja_env = Environment(
     loader=FileSystemLoader((
-        PathsHelper.create_directory_path('views'),
-        PathsHelper.create_directory_path('entities', 'movies', 'views'),
+        PathsHelper.create_absolute_path('views'),
+        PathsHelper.create_absolute_path('entities', 'movies', 'views'),
     )),
     autoescape=select_autoescape(),
 )

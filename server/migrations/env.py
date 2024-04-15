@@ -1,13 +1,12 @@
 from logging.config import fileConfig
-from os import environ, getcwd
+from os import getcwd
 from pathlib import Path
 from sys import path
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-environ['SERVER_PATH'] = Path(getcwd(), 'server').as_posix()
-path.append(environ['SERVER_PATH'])
+path.append(Path(getcwd(), 'server').as_posix())
 
 
 from db import DB

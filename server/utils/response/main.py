@@ -13,7 +13,7 @@ class Response:
         request: HttpRequest,
         status: int,
         headers: list[tuple[str, str]] | None = None,
-        body: str = '',
+        body: str | bytes = '',
         content_type: str | None = 'text/html',
     ) -> None:
         """Create a custom responses with the given parameters.
@@ -27,7 +27,7 @@ class Response:
         """
         request.send_response(status)
 
-        if content_type:
+        if content_type is not None:
             request.send_header('Content-type', content_type)
 
         if headers:
@@ -37,7 +37,8 @@ class Response:
         request.end_headers()
 
         if body:
-            request.wfile.write(body.encode())
+            body = body.encode() if isinstance(body, str) else body
+            request.wfile.write(body)
 
     @classmethod
     def load_page(

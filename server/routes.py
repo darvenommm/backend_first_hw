@@ -5,8 +5,8 @@ from typing import Callable, TypeAlias
 
 from common.http import HttpMethodsType, http_methods
 from entities.movies.controllers import MoviesController
-from entities.static.controllers import StaticController
 from paths import Paths
+from utils.static import StaticHandler
 
 RoutesControllerHandler = Callable[[BaseHTTPRequestHandler], None]
 RoutesType: TypeAlias = dict[HttpMethodsType, dict[str, RoutesControllerHandler]]
@@ -18,9 +18,6 @@ routes: RoutesType = {
         Paths.movies: MoviesController.load_all,
         Paths.movie: MoviesController.load_one,
         Paths.my_movies: MoviesController.load_mine,
-
-        Paths.styles: StaticController.load_styles,
-        Paths.movies_js: StaticController.load_movies_js,
     },
     'POST': {
         Paths.my_movies: MoviesController.add,
@@ -63,12 +60,16 @@ class Router:
             Callable: http method handler.
         """
         def inner(request: BaseHTTPRequestHandler) -> None:
+            given_path = request.path.split('?')[0].rstrip('/')
+
             for (path, controller_handler) in routes.get(method, {}).items():
                 path = path.rstrip('/')
-                given_path = request.path.split('?')[0].rstrip('/')
-
                 checking_path = rf'^{path}$'
 
                 if bool(re.match(checking_path, given_path)):
                     return controller_handler(request)
+
+            if method == 'GET':
+                StaticHandler.handle_path(request, given_path)
+
         return inner
