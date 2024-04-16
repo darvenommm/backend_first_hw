@@ -15,6 +15,8 @@ class NotFoundEnvVariableError(Exception):
 
 SERVER_HOST = environ.get('SERVER_HOST', '127.0.0.1')
 SERVER_PORT = int(environ.get('SERVER_PORT', '8000'))
+SERVER_PROTOCOL = environ.get('SERVER_PROTOCOL', 'http')
+SERVER_DOMAIN = f'{SERVER_PROTOCOL}://{SERVER_HOST}:{SERVER_PORT}'
 DB_NAME = environ.get('DB_NAME', 'postgres')
 DB_HOST = environ.get('DB_HOST', '127.0.0.1')
 DB_PORT = int(environ.get('DB_PORT', '5432'))

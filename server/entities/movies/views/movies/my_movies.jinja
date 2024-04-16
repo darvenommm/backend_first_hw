@@ -1,7 +1,7 @@
 {% extends "base.jinja" %}
 
 {% block head %}
-<script src="/js/movies.js" defer></script>
+<script src="/js/my_movies.js" defer></script>
 {% endblock head %}
 
 {% block main %}
@@ -33,7 +33,7 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>Not have movies for viewing</p>
+    <p class="movies__not-have">Not have movies for viewing</p>
   {% endif %}
 </div>
 {% endblock main %}
