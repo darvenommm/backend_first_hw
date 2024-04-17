@@ -1,0 +1,49 @@
+name: Check
+on: push
+jobs:
+  linter:
+    name: Linter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12.2
+    - name: Install linter dependencies
+      run: pip install flake8==7.0.0 wemake-python-styleguide==0.19.2
+    - name: Run flake
+      run: flake8
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    environment: github_actions_env
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Make .env file
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_SERVER_PORT: ${{ vars.SERVER_PORT }}
+          envkey_MOVIES_API_KEY: ${{ secrets.MOVIES_API_KEY }}
+          envkey_DB_NAME: ${{ vars.DB_NAME }}
+          envkey_DB_USERNAME: ${{ vars.DB_USERNAME }}
+          envkey_DB_PASSWORD: ${{ vars.DB_PASSWORD }}
+      - name: Run server
+        run: docker-compose up -d --build
+      - name: Install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12.2
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          poetry install --without=dev --without=docker
+          poetry add pytest
+      - name: Run test
+        run: poetry run pytest ./server/tests/
+      - name: Stop server container
+        if: always()
+        run: docker-compose down
