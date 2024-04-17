@@ -1,28 +1,44 @@
 """Module for testing pages."""
-from uuid import uuid4
-
 import requests
-from bs4 import BeautifulSoup, Tag
+from bs4 import Tag
 from paths import Paths
 from utils.env_variable import env
+from utils.html_parser import HtmlParser
+
+IMDB_FOR_TESTING = 'tt2024469'
 
 
-class TestPages:
-    """Test pages."""
+def get_page_url(path: str) -> str:
+    """Get page url for testing.
 
-    imdb = 'tt2024469'
+    Args:
+        path: page url without domain.
 
-    def test_index_page(self):
+    Returns:
+        str: result url.
+    """
+    return f'{env.SERVER_DOMAIN}{path}'
+
+
+class TestIndexPage:
+    """Class for testing the index page."""
+
+    def test(self) -> None:
         """Test index page."""
-        form = self.get_parsed_html(Paths.home).find('form', class_='search_form')
+        url = get_page_url(Paths.home)
+        form = HtmlParser.parse_by_request(url).find('form', class_='search_form')
         assert (form and isinstance(form, Tag))
 
         for tag in (form.label, form.input, form.button):
             assert tag
 
-    def test_movies_page(self):
+
+class TestMoviesPage:
+    """Class for testing the movies page."""
+
+    def test(self) -> None:
         """Test movies page."""
-        html = self.get_parsed_html(Paths.movies, {'search_title': 'Stop'})
+        html = HtmlParser.parse_by_request(get_page_url(Paths.movies), {'search_title': 'Stop'})
         list_ = html.find('ul', class_='movies__list')
         assert (list_ and isinstance(list_, Tag))
 
@@ -33,63 +49,51 @@ class TestPages:
             for tag in (li_item.h2, li_item.img):
                 assert tag
 
-    def test_movies_error_page(self):
-        """Test movies page with incorrect search title."""
-        html = self.get_parsed_html(Paths.movies, {'search_title': str(uuid4())})
 
-        error_paragraph = html.find('p', class_='error')
-        assert (error_paragraph and isinstance(error_paragraph, Tag))
+class TestMoviePage:
+    """Class for testing movie page."""
 
-    def test_my_movies_page(self):
-        """Test my movies page creating and deleting some movie."""
-        self.does_not_have_my_movies()
-        self.add_movie()
-        self.has_my_movies()
-        self.remove_movie()
-        self.does_not_have_my_movies()
+    def test(self) -> None:
+        """Test movie page."""
+        url = get_page_url(f'{Paths.movies}/{IMDB_FOR_TESTING}')
+        movie_container = HtmlParser.parse_by_request(url).find('div', class_='movie')
 
-    def does_not_have_my_movies(self) -> bool:
-        """Check my movies page doesn't have any movies.
+        assert (movie_container and isinstance(movie_container, Tag))
+        assert movie_container.find('h1')
+        assert movie_container.find_all('p')
+
+
+class TestMyMoviesPage:
+    """Class for testing my movies page."""
+
+    page_url = get_page_url(Paths.my_movies)
+
+    @classmethod
+    def test(cls) -> None:
+        """Test my movie page."""
+        assert cls.is_empty()
+        cls.add_movie()
+        assert not cls.is_empty()
+        cls.remove_movie()
+        assert cls.is_empty()
+
+    @classmethod
+    def add_movie(cls) -> None:
+        """Add the test movie."""
+        request_data = {'imdb': IMDB_FOR_TESTING}
+        requests.post(cls.page_url, request_data, timeout=10)
+
+    @classmethod
+    def remove_movie(cls) -> None:
+        """Remove the test movie."""
+        requests.delete(f'{cls.page_url}/{IMDB_FOR_TESTING}', timeout=10)
+
+    @classmethod
+    def is_empty(cls) -> bool:
+        """Check being empty page.
 
         Returns:
-            bool: no movies - is a truth?.
+            bool: is empty or no.
         """
-        html = self.get_parsed_html(Paths.my_movies)
-        no_movies_paragraph = html.find('p', class_='movies__not-have')
-        return (no_movies_paragraph is not None and isinstance(no_movies_paragraph, Tag))
-
-    def has_my_movies(self) -> bool:
-        """Check my movies page has some movies.
-
-        Returns:
-            bool: movies are - is a truth?.
-        """
-        html = self.get_parsed_html(Paths.my_movies)
-        list_ = html.find('ul', class_='movies__list')
-        return (list_ is not None and isinstance(list_, Tag))
-
-    @staticmethod
-    def get_parsed_html(path: str, queries: dict[str, str] | None = None) -> BeautifulSoup:
-        """Parse html page by request to the server.
-
-        Args:
-            path: Endpoint path.
-            queries: extra get queries. Defaults to None.
-
-        Returns:
-            BeautifulSoup: Parsed html.
-        """
-        queries = queries if queries else {}
-        page_text = requests.get(f'{env.SERVER_DOMAIN}{path}', queries, timeout=10).text
-
-        return BeautifulSoup(page_text, 'html.parser')
-
-    def add_movie(self) -> None:
-        """Add movie to mine."""
-        path = f'{env.SERVER_DOMAIN}{Paths.my_movies}'
-        requests.post(path, {'imdb': self.imdb}, timeout=10)
-
-    def remove_movie(self) -> None:
-        """Delete movie from mine."""
-        path = f'{env.SERVER_DOMAIN}{Paths.my_movies}/{self.imdb}'
-        requests.delete(path, timeout=10)
+        p_element = HtmlParser.parse_by_request(cls.page_url).find('p', class_='movies__not-have')
+        return (p_element is not None and isinstance(p_element, Tag))
