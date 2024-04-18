@@ -11,6 +11,8 @@ Than copy this repository by git (git clone), navigate to the created folder (cd
 - finally go to the http://localhost/<env.SERVER_PORT> after you see "start" in the terminal
 
 ## Environment variables
+https://www.omdbapi.com/ - for getting movies api key
+
 SERVER_PORT=<change_me>
 
 MOVIES_API_KEY=<change_me>
