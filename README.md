@@ -1,9 +1,14 @@
 # Movies site
 
 ## Launch
-chmod +x ./commands/run.sh
+First of all, you's to have docker and git in your pc
 
-source ./commands/run.sh
+Than copy this repository by git (git clone), navigate to the created folder (cd) and follow the instructions below
+
+- chmod +x ./commands/run.sh
+- (create .env file in the root directory)
+- source ./commands/run.sh
+- finally go to the http://localhost/<env.SERVER_PORT> after you see "start" in the terminal
 
 ## Environment variables
 SERVER_PORT=<change_me>
